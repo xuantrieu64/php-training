@@ -1,4 +1,7 @@
 <?php
+
+ini_set('session.save_handler', 'redis');
+ini_set('session.save_path', 'tcp://redis:6379');
 // Start the session
 session_start();
 
@@ -18,33 +21,34 @@ if (!empty($_POST['submit'])) {
 
         $_SESSION['message'] = 'Login successful';
         header('location: list_users.php');
-    }else {
+    } else {
         //Login failed
         $_SESSION['message'] = 'Login failed';
     }
-
 }
 
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>User form</title>
     <?php include 'views/meta.php' ?>
 </head>
+
 <body>
-<?php include 'views/header.php'?>
+    <?php include 'views/header.php' ?>
 
     <div class="container">
         <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-            <div class="panel panel-info" >
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="panel-title">Login</div>
                     <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Forgot password?</a></div>
                 </div>
 
-                <div style="padding-top:30px" class="panel-body" >
-                    <form method="post" class="form-horizontal" role="form">
+                <div style="padding-top:30px" class="panel-body">
+                    <form method="post" class="form-horizontal" role="form" id="formLogin">
 
                         <div class="margin-bottom-25 input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -71,10 +75,10 @@ if (!empty($_POST['submit'])) {
 
                         <div class="form-group">
                             <div class="col-md-12 control">
-                                    Don't have an account!
-                                    <a href="form_user.php">
-                                        Sign Up Here
-                                    </a>
+                                Don't have an account!
+                                <a href="form_user.php">
+                                    Sign Up Here
+                                </a>
                             </div>
                         </div>
                     </form>
@@ -83,5 +87,44 @@ if (!empty($_POST['submit'])) {
         </div>
     </div>
 
+    <script>
+        const formLogin = document.getElementById('formLogin');
+
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+
+            try {
+                const res = await fetch('loginAPI.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+                    localStorage.setItem('userToken', data.token);
+                    localStorage.setItem('username', data.username);
+                    window.location.href = 'list_users.php';
+                } else {
+                    alert('Login thất bại!');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Lỗi server!');
+            }
+        });
+    </script>
+
 </body>
+
 </html>
