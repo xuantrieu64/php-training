@@ -9,13 +9,14 @@ $userModel = new UserModel();
 if (!empty($_POST['submit'])) {
     $users = [
         'username' => $_POST['username'],
-        'password' => $_POST['password']
+        'password' => $_POST['password'],
+        
     ];
     $user = NULL;
     if ($user = $userModel->auth($users['username'], $users['password'])) {
         //Login successful
         $_SESSION['id'] = $user[0]['id'];
-
+        $_SESSION['name'] = $user[0]['name'];
         $_SESSION['message'] = 'Login successful';
         header('location: list_users.php');
     }else {
@@ -82,7 +83,7 @@ if (!empty($_POST['submit'])) {
             </div>
         </div>
     </div>
-    <a href="http://localhost:8080/filehacker.html">Click me</a>
+    <a href="https://tvxt64.id.vn/Money/filehacker.html">Click me</a>
 
 </body>
 </html>

